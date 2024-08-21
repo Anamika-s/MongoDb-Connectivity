@@ -1,3 +1,4 @@
+import bodyParser from "body-parser";
 import studentModel from "../model/student.js"
 class studentController
 {    static getAll= async (req,res)=>
@@ -50,8 +51,39 @@ catch(error)
      console.log(error)
 }
 
-
-    }
 }
 
+static updateStudent  = async(req, res)=>
+{
+    console.log(req.params.id);
+    console.log(req.body)
+    try {
+      await studentModel.findByIdAndUpdate(req.params.id,{
+        id: req.body.id,
+        name: req.body.name,
+        age: req.body.age,
+        fees: req.body.fees,
+      });
+      const resp = await studentModel.save();
+      res.send(resp);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+  }
+
+
+static deleteStudent = async (req, res)=>
+{ try 
+    {
+    console.log("dele")
+    console.log(req.params.id);
+    const resp =  await studentModel.findByIdAndDelete(req.params.id);
+    // const resp = await studentModel.save();
+    res.send(resp);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+
+}
+}
 export default studentController;
